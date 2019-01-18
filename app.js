@@ -1,10 +1,12 @@
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+'use strict';
 
-var indexRouter = require('./routes/index');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var app = express();
+const indexRouter = require('./routes/index');
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
