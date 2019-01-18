@@ -1,0 +1,17 @@
+{
+  "dev": {
+    "driver": "mysql",
+    "host": "localhost",
+    "database": "polling_booth_development",
+    "user": { "ENV": "POLLING_BOOTH_DATABASE_USERNAME" },
+    "password": { "ENV": "POLLING_BOOTH_DATABASE_PASSWORD" }
+  },
+
+  "prod": {
+    "driver": "mysql",
+    "host": "localhost",
+    "database": "polling_booth_production",
+    "user": { "ENV": "POLLING_BOOTH_DATABASE_USERNAME" },
+    "password": { "ENV": "POLLING_BOOTH_DATABASE_PASSWORD" }
+  }
+}
