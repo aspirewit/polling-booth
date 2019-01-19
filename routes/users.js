@@ -27,6 +27,7 @@ router.post('/register', [
   }
 
   const { fullname, email, password, verificationCode } = req.body;
+  console.log('verificationCode' + verificationCode);
 
   function createUser() {
     const saltRounds = 10;
@@ -53,14 +54,13 @@ router.post('/register', [
 router.post('/login', [
   check('email').isEmail(),
   check('password').matches(/^[a-zA-Z0-9]{6,24}$/),
-  check('captcha').matches(/^[a-zA-Z0-9]{4}$/),
 ], function(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const { email, password, captcha } = req.body;
+  const { email, password } = req.body;
 
   req.models.users.one({ email }, function(err, user) {
     if (!user) {
@@ -75,10 +75,6 @@ router.post('/login', [
     const token = generateJsonWebToken(user);
     res.json({ code: 200, message: 'success', data: { token } });
   });
-});
-
-router.delete('/logout', function(_, res) {
-  res.json({ code: 200, message: 'success' });
 });
 
 module.exports = router;

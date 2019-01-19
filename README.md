@@ -1,5 +1,9 @@
 # Polling Booth
 
+## Preconditions
+1. MySQL
+2. Redis
+
 ## Deployment
 
 ### 1. Environment variables

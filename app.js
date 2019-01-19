@@ -44,10 +44,12 @@ app.use(expressJwt({
   ],
 }));
 
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'you have not login yet' });
   }
+
+  next();
 });
 
 app.use('/', indexRouter);
