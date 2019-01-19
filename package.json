@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "migrate": "node ./node_modules/db-migrate/bin/db-migrate up",
     "lint": "eslint ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run migrate"
     }
   },
   "dependencies": {

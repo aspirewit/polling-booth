@@ -4,6 +4,8 @@
 
 ### 1. Environment variables
 ```shell
-export POLLING_BOOTH_DATABASE_USERNAME='username'
-export POLLING_BOOTH_DATABASE_PASSWORD='password'
+export POLLING_BOOTH_DATABASE_HOST='<database host>'
+export POLLING_BOOTH_DATABASE_NAME='<database name>'
+export POLLING_BOOTH_DATABASE_USERNAME='<database username>'
+export POLLING_BOOTH_DATABASE_PASSWORD='<database password>'
 ```

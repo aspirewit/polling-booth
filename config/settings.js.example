@@ -8,9 +8,12 @@ module.exports = {
   database: {
     protocol: 'mysql',
     query: { pool: true },
-    host: '127.0.0.1',
-    database: '<database>',
+    host: process.env.POLLING_BOOTH_DATABASE_HOST,
+    database: process.env.POLLING_BOOTH_DATABASE_NAME,
     user: process.env.POLLING_BOOTH_DATABASE_USERNAME,
     password: process.env.POLLING_BOOTH_DATABASE_PASSWORD,
+  },
+  view: {
+    maxPageSize: 20,
   },
 };

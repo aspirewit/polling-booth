@@ -17,7 +17,9 @@ app.use(cookieParser());
 
 app.use(function(req, res, next) {
   models(function(err, db) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
 
     req.models = db.models;
     req.db = db;

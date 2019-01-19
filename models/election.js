@@ -8,9 +8,18 @@ module.exports = function(orm, db) {
     disabled: { type: 'boolean' },
     startTime: { type: 'date', required: true, time: true },
     endTime: { type: 'date', required: true, time: true },
+
     createdAt: { type: 'date', required: true, time: true },
     updatedAt: { type: 'date', required: true, time: true },
   }, {
+    hooks: {
+      beforeCreate() {
+        this.createdAt = Date.now();
+      },
+      beforeSave() {
+        this.updatedAt = Date.now();
+      },
+    },
     validations: {
       title: orm.enforce.ranges.length(5, 30),
       description: orm.enforce.ranges.length(10, 1024),
