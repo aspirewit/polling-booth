@@ -17,7 +17,8 @@
     "db-migrate-mysql": "^1.1.10",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "orm": "^5.0.2"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
