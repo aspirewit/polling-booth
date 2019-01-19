@@ -1,10 +1,14 @@
 'use strict';
 
-const settings = require('./config/settings');
 const nodemailer = require('nodemailer');
 const Queue = require('bull');
-const emailQueue = new Queue('email', settings.redis.url);
+const redis = require('redis');
+const settings = require('./config/settings');
+
+const redisUrl = settings.redis.url;
+const emailQueue = new Queue('email', redisUrl);
 const transporter = nodemailer.createTransport(settings.email.transporter);
+const redisClient = redis.createClient({ url: redisUrl });
 
 emailQueue.process(function(job, done) {
   const { to, subject, text } = job.data;
@@ -20,6 +24,8 @@ emailQueue.process(function(job, done) {
 });
 
 module.exports = {
+  redisClient,
+
   parseInt(number) {
     return parseInt(number) || 0;
   },
