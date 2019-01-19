@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Integrate ORM
 app.use(function(req, res, next) {
   models(function(err, db) {
     if (err) {
@@ -34,16 +35,19 @@ app.use(function(req, res, next) {
   });
 });
 
+// Integrate JWT
 app.use(expressJwt({
   secret: settings.jwt.secret,
 }).unless({
   path: [
     '/',
+    '/users/verification-code',
     '/users/register',
     '/users/login',
   ],
 }));
 
+// Set the req.loggedInUser with the current user
 app.use(function(req, res, next) {
   if (!req.user.id) {
     return next();
@@ -58,6 +62,7 @@ app.use(function(req, res, next) {
   });
 });
 
+// Error handling
 app.use(function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'you have not login yet' });
@@ -66,6 +71,7 @@ app.use(function(err, req, res, next) {
   next();
 });
 
+// Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/elections', electionsRouter);
