@@ -5,9 +5,10 @@ module.exports = function(orm, db) {
     fullname: { type: 'text', required: true },
     email: { type: 'text', required: true, unique: true },
     admin: { type: 'boolean', required: true },
+    passwordDigest: { type: 'text', required: true },
 
-    createdAt: { type: 'date', required: true, time: true },
-    updatedAt: { type: 'date', required: true, time: true },
+    createdAt: { type: 'date', time: true },
+    updatedAt: { type: 'date', time: true },
   }, {
     hooks: {
       beforeCreate() {
@@ -19,6 +20,8 @@ module.exports = function(orm, db) {
     },
     validations: {
       fullname: orm.enforce.ranges.length(1, 24),
+      emal: orm.enforce.patterns.email(),
+      passwordDigest: orm.enforce.patterns.match(/^\$2b\$\d+\$.{53}$/),
     },
   });
 };

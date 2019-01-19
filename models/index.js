@@ -6,6 +6,7 @@ const settings = require('../config/settings');
 let connection = null;
 
 function setup(db, callback) {
+  require('./user')(orm, db);
   require('./election')(orm, db);
 
   return callback(null, db);

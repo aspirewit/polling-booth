@@ -13,6 +13,10 @@ module.exports = {
     user: process.env.POLLING_BOOTH_DATABASE_USERNAME,
     password: process.env.POLLING_BOOTH_DATABASE_PASSWORD,
   },
+  jwt: {
+    secret: '<JWT secret>',
+    expiresIn: 604800,
+  },
   view: {
     maxPageSize: 20,
   },

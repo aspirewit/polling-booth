@@ -9,8 +9,8 @@ module.exports = function(orm, db) {
     startTime: { type: 'date', required: true, time: true },
     endTime: { type: 'date', required: true, time: true },
 
-    createdAt: { type: 'date', required: true, time: true },
-    updatedAt: { type: 'date', required: true, time: true },
+    createdAt: { type: 'date', time: true },
+    updatedAt: { type: 'date', time: true },
   }, {
     hooks: {
       beforeCreate() {
