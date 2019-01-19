@@ -44,6 +44,20 @@ app.use(expressJwt({
   ],
 }));
 
+app.use(function(req, res, next) {
+  if (!req.user.id) {
+    return next();
+  }
+
+  req.models.users.get(req.user.id, function(err, user) {
+    if (user) {
+      req.loggedInUser = user;
+    }
+
+    next();
+  });
+});
+
 app.use(function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'you have not login yet' });
