@@ -8,7 +8,7 @@ exports.up = function(db) {
 
     title: { type: 'string', notNull: true },
     description: { type: 'text', notNull: true },
-    enabled: { type: 'boolean', defaultValue: false },
+    enabled: { type: 'boolean', notNull: true, defaultValue: false },
     userId: { type: 'bigint', notNull: true },
   });
 };

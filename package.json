@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "debug": "DEBUG=polling-booth:* npm start",
     "migrate:up": "node ./node_modules/db-migrate/bin/db-migrate up",
     "migrate:down": "node ./node_modules/db-migrate/bin/db-migrate down",
     "migrate:create": "node ./node_modules/db-migrate/bin/db-migrate create",
@@ -12,8 +13,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run migrate:up"
+      "pre-commit": "npm run lint"
     }
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "express": "~4.16.0",
     "express-jwt": "^5.3.1",
     "express-validator": "^5.3.1",
+    "lodash": "^4.17.11",
     "morgan": "~1.9.0",
     "nodemailer": "^5.1.1",
     "orm": "^5.0.2",

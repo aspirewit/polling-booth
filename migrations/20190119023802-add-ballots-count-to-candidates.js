@@ -1,7 +1,7 @@
 'use strict';
 
 exports.up = function(db) {
-  return db.addColumn('candidates', 'ballotsCount', { type: 'int', defaultValue: 0 });
+  return db.addColumn('candidates', 'ballotsCount', { type: 'int', notNull: true, defaultValue: 0 });
 };
 
 exports.down = function(db) {

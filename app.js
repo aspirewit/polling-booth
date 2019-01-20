@@ -11,6 +11,8 @@ const models = require('./models/');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const electionsRouter = require('./routes/elections');
+const candidatesRouter = require('./routes/candidates');
+const ballotsRouter = require('./routes/ballots');
 
 const app = express();
 
@@ -44,12 +46,14 @@ app.use(expressJwt({
     '/users/verification-code',
     '/users/register',
     '/users/login',
+    { url: '/elections', methods: [ 'GET' ] },
+    { url: /\/elections\/[0-9]+/, methods: [ 'GET' ] },
   ],
 }));
 
 // Set the req.loggedInUser with the current user
 app.use(function(req, res, next) {
-  if (!req.user.id) {
+  if (!req.user || !req.user.id) {
     return next();
   }
 
@@ -66,14 +70,16 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'you have not login yet' });
+  } else {
+    next(err);
   }
-
-  next();
 });
 
 // Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/elections', electionsRouter);
+app.use('/candidates', candidatesRouter);
+app.use('/ballots', ballotsRouter);
 
 module.exports = app;

@@ -23,5 +23,15 @@ module.exports = function(orm, db) {
       emal: orm.enforce.patterns.email(),
       passwordDigest: orm.enforce.patterns.match(/^\$2b\$\d+\$.{53}$/),
     },
+    methods: {
+      serialize() {
+        return {
+          id: this.id,
+          fullname: this.fullname,
+          email: this.email,
+          admin: this.admin,
+        };
+      },
+    },
   });
 };

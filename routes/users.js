@@ -66,7 +66,7 @@ router.post('/register', [
       }
 
       const token = generateJsonWebToken(user);
-      res.json({ code: 200, message: 'success', data: { token } });
+      res.json({ code: 200, message: 'success', data: { user: user.serialize(), token } });
     });
   }
 
@@ -107,7 +107,7 @@ router.post('/login', [
     }
 
     const token = generateJsonWebToken(user);
-    res.json({ code: 200, message: 'success', data: { token } });
+    res.json({ code: 200, message: 'success', data: { user: user.serialize(), token } });
   });
 });
 

@@ -4,10 +4,11 @@ module.exports = function(orm, db) {
   db.define('elections', {
     title: { type: 'text', required: true },
     description: { type: 'text', required: true },
-    candidatesCount: { type: 'integer' },
+    candidatesCount: { type: 'integer', defaultValue: 0 },
     disabled: { type: 'boolean' },
     startTime: { type: 'date', required: true, time: true },
     endTime: { type: 'date', required: true, time: true },
+    userId: { type: 'integer', required: true },
 
     createdAt: { type: 'date', time: true },
     updatedAt: { type: 'date', time: true },

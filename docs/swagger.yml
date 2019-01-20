@@ -10,11 +10,20 @@ schemes:
 host: "localhost:3000"
 basePath: "/"
 
+securityDefinitions:
+  authentication:
+    type: apiKey
+    name: Authorization
+    in: header
+
 tags:
 - name: "user"
+- name: "election"
+- name: "candidate"
+- name: "ballot"
 
 paths:
-  /verification-code:
+  /users/verification-code:
     post:
       tags:
         - "user"
@@ -22,6 +31,8 @@ paths:
       parameters:
       - in: "formData"
         name: "email"
+        schema:
+          type: "string"
         required: true
       responses:
         200:
@@ -41,25 +52,33 @@ paths:
       parameters:
       - in: "formData"
         name: "email"
+        schema:
+          type: "string"
         required: true
       - in: "formData"
         name: "fullname"
+        schema:
+          type: "string"
         required: true
       - in: "formData"
         name: "password"
+        schema:
+          type: "string"
         required: true
       - in: "formData"
         name: "verificationCode"
+        schema:
+          type: "string"
         required: true
       responses:
         200:
           description: "Success"
-          example: "{ code: 200, message: 'success' }"
+          example: "{ code: 200, message: 'success', data: { user: {}, token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoxMjMsImlhdCI6MTQ5MTQ3NTQyNCwiZXhwIjoxNDkxNDc1NDg0fQ.hYNC4qFAyhZClmPaLixfN137d41R2CFk1xPlfLK10JU' } }"
         1001:
           description: "Verification code is incorrect"
           example: "{ code: 1001, message: 'verification code is incorrect' }"
         1002:
-          description: "email address already in use"
+          description: "Email address already in use"
           example: "{ code: 1002, message: 'email address already in use' }"
         422:
           description: "Unprocessable entity"
@@ -67,19 +86,23 @@ paths:
   /users/login:
     post:
       tags:
-        - "users"
+        - "user"
       summary: "Login"
       parameters:
       - in: "formData"
         name: "email"
+        schema:
+          type: "string"
         required: true
       - in: "formData"
         name: "password"
+        schema:
+          type: "string"
         required: true
       responses:
         200:
           description: "Success"
-          example: "{ code: 200, message: 'success', data: { token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoxMjMsImlhdCI6MTQ5MTQ3NTQyNCwiZXhwIjoxNDkxNDc1NDg0fQ.hYNC4qFAyhZClmPaLixfN137d41R2CFk1xPlfLK10JU' } }"
+          example: "{ code: 200, message: 'success', data: { user: {}, token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoxMjMsImlhdCI6MTQ5MTQ3NTQyNCwiZXhwIjoxNDkxNDc1NDg0fQ.hYNC4qFAyhZClmPaLixfN137d41R2CFk1xPlfLK10JU' } }"
         1001:
           description: "User does not exist"
           example: "{ code: 1001, message: 'user does not exist' }"
@@ -88,3 +111,115 @@ paths:
           example: "{ code: 1002, message: 'password is incorrect' }"
         422:
           description: "Unprocessable entity"
+
+  /elections:
+    get:
+      tags:
+        - "election"
+      summary: "List elections"
+      parameters:
+      - in: "query"
+        name: "cursor"
+        schema:
+          type: "integer"
+      - in: "query"
+        name: "limit"
+        schema:
+          type: "integer"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { elections: [] } }"
+    post:
+      security:
+        - authentication: []
+      tags:
+        - "election"
+      summary: "Create election"
+      parameters:
+      - in: "formData"
+        name: "title"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "description"
+        schem:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "startTime"
+        schema:
+          type: "integer"
+        required: true
+      - in: "formData"
+        name: "endTime"
+        schema:
+          type: "integer"
+        required: true
+      - in: "formData"
+        name: "disabled"
+        schema:
+          type: "boolean"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { election: {} } }"
+
+  '/elections/{id}':
+    get:
+      tags:
+        - "election"
+      summary: "Show election"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { election: {} } }"
+    patch:
+      security:
+        - authentication: []
+      tags:
+        - "election"
+      summary: "Update election"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        schema:
+          type: "integer"
+      - in: "formData"
+        name: "title"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "description"
+        schem:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "startTime"
+        schema:
+          type: "integer"
+        required: true
+      - in: "formData"
+        name: "endTime"
+        schema:
+          type: "integer"
+        required: true
+      - in: "formData"
+        name: "disabled"
+        schema:
+          type: "boolean"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { election: {} } }"

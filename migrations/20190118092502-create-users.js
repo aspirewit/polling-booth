@@ -8,7 +8,7 @@ exports.up = function(db) {
 
     fullname: { type: 'string', notNull: true },
     email: { type: 'string', notNull: true, unique: true },
-    admin: { type: 'boolean', defaultValue: false },
+    admin: { type: 'boolean', notNull: true, defaultValue: false },
   });
 };
 

@@ -8,6 +8,8 @@ let connection = null;
 function setup(db, callback) {
   require('./user')(orm, db);
   require('./election')(orm, db);
+  require('./candidate')(orm, db);
+  require('./ballot')(orm, db);
 
   return callback(null, db);
 }
