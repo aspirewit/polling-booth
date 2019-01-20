@@ -7,6 +7,7 @@
     "migrate:up": "node ./node_modules/db-migrate/bin/db-migrate up",
     "migrate:down": "node ./node_modules/db-migrate/bin/db-migrate down",
     "migrate:create": "node ./node_modules/db-migrate/bin/db-migrate create",
+    "swagger": "node ./node_modules/yamljs/bin/yaml2json docs/swagger.yml > public/swagger.json",
     "lint": "eslint ."
   },
   "husky": {
@@ -28,7 +29,8 @@
     "morgan": "~1.9.0",
     "nodemailer": "^5.1.1",
     "orm": "^5.0.2",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

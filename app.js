@@ -1,8 +1,8 @@
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const expressJwt = require('express-jwt');
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Integrate ORM
 app.use(function(req, res, next) {
