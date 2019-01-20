@@ -20,8 +20,9 @@ router.post('/', [
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const attrs = objects.pick(req.body, [ 'title', 'description', 'startTime', 'endTime', 'disabled' ]);
+  const attrs = objects.pick(req.body, [ 'title', 'description', 'startTime', 'endTime' ]);
   attrs.userId = req.user.id;
+  attrs.disabled = req.body.disabled === 'true';
 
   req.models.elections.create(attrs, function(err, election) {
     if (err) {
@@ -85,7 +86,7 @@ router.patch('/:id', [
     election.description = description;
     election.startTime = startTime;
     election.endTime = endTime;
-    election.disabled = disabled;
+    election.disabled = disabled === 'true';
 
     election.save(function(err) {
       if (err) {
