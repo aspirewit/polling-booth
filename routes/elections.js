@@ -4,17 +4,21 @@ const express = require('express');
 const objects = require('lodash/object');
 const { check, validationResult } = require('express-validator/check');
 const helper = require('../helper');
+const { adminRequired } = require('../middlewares');
 
 const router = express.Router();
 const orm = require('orm');
 
-router.post('/', [
+const middlewaresForSave = [
+  adminRequired(),
   check('title').isLength({ min: 5, max: 30 }),
   check('description').isLength({ min: 10, max: 1024 }),
   check('startTime').isInt(),
   check('endTime').isInt(),
   check('disabled').isBoolean(),
-], function(req, res, next) {
+];
+
+router.post('/', middlewaresForSave, function(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -22,7 +26,7 @@ router.post('/', [
 
   const attrs = objects.pick(req.body, [ 'title', 'description', 'startTime', 'endTime' ]);
   attrs.userId = req.user.id;
-  attrs.disabled = req.body.disabled === 'true';
+  attrs.disabled = helper.parseBoolean(req.body.disabled);
 
   req.models.elections.create(attrs, function(err, election) {
     if (err) {
@@ -62,13 +66,7 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-router.patch('/:id', [
-  check('title').isLength({ min: 5, max: 30 }),
-  check('description').isLength({ min: 10, max: 1024 }),
-  check('startTime').isInt(),
-  check('endTime').isInt(),
-  check('disabled').isBoolean(),
-], function(req, res, next) {
+router.patch('/:id', middlewaresForSave, function(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -86,7 +84,7 @@ router.patch('/:id', [
     election.description = description;
     election.startTime = startTime;
     election.endTime = endTime;
-    election.disabled = disabled === 'true';
+    election.disabled = helper.parseBoolean(disabled);
 
     election.save(function(err) {
       if (err) {

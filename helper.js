@@ -30,6 +30,10 @@ module.exports = {
     return parseInt(number) || 0;
   },
 
+  parseBoolean(bool) {
+    return bool === true || bool === 'true' || bool === 'True';
+  },
+
   pageSize(number) {
     const maxPageSize = settings.view.maxPageSize;
     const size = parseInt(number) || maxPageSize;
