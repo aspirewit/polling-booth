@@ -26,7 +26,7 @@ copy config/settings.js.example config/settings.js
 ### 4. Other steps
 ```shell
 npm install         # Install dependencies
-npm run migrate     # Execute database migration
+npm run migrate:up  # Execute database migration
 ```
 
 ### 5. Start

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function() {
-  return (req, res, next) => {
+  return function(req, res, next) {
     const loggedInUser = req.loggedInUser;
 
     if (loggedInUser && loggedInUser.admin) {

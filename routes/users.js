@@ -3,13 +3,21 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { check, validationResult } = require('express-validator/check');
+const { check } = require('express-validator/check');
 
 const settings = require('../config/settings');
 const helper = require('../helper');
 const services = require('../services');
+const { checkValidationResult } = require('../middlewares');
 
 const router = express.Router();
+const middlewaresForRegister = [
+  check('email').isEmail(),
+  check('fullname').isLength({ min: 1, max: 24 }),
+  check('password').matches(/^[a-zA-Z0-9]{6,24}$/),
+  check('verificationCode').matches(/^[0-9]{4}$/),
+  checkValidationResult(),
+];
 
 function generateJsonWebToken(user) {
   return jwt.sign({
@@ -21,12 +29,8 @@ function generateJsonWebToken(user) {
 
 router.post('/verification-code', [
   check('email').isEmail(),
+  checkValidationResult(),
 ], function(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const email = req.body.email;
   services.verificationCode.allowGenerate(email).then(function(allowed) {
     if (!allowed) {
@@ -44,17 +48,7 @@ router.post('/verification-code', [
   });
 });
 
-router.post('/register', [
-  check('email').isEmail(),
-  check('fullname').isLength({ min: 1, max: 24 }),
-  check('password').matches(/^[a-zA-Z0-9]{6,24}$/),
-  check('verificationCode').matches(/^[0-9]{4}$/),
-], function(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
+router.post('/register', middlewaresForRegister, function(req, res, next) {
   const { fullname, email, password, verificationCode } = req.body;
 
   function createUser() {
@@ -88,12 +82,8 @@ router.post('/register', [
 router.post('/login', [
   check('email').isEmail(),
   check('password').matches(/^[a-zA-Z0-9]{6,24}$/),
+  checkValidationResult(),
 ], function(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const { email, password } = req.body;
 
   req.models.users.one({ email }, function(err, user) {

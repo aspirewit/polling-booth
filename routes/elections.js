@@ -2,12 +2,13 @@
 
 const express = require('express');
 const objects = require('lodash/object');
-const { check, validationResult } = require('express-validator/check');
+const orm = require('orm');
+const { check } = require('express-validator/check');
+
 const helper = require('../helper');
-const { adminRequired } = require('../middlewares');
+const { adminRequired, checkValidationResult } = require('../middlewares');
 
 const router = express.Router();
-const orm = require('orm');
 
 const middlewaresForSave = [
   adminRequired(),
@@ -16,14 +17,10 @@ const middlewaresForSave = [
   check('startTime').isInt(),
   check('endTime').isInt(),
   check('disabled').isBoolean(),
+  checkValidationResult(),
 ];
 
 router.post('/', middlewaresForSave, function(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const attrs = objects.pick(req.body, [ 'title', 'description', 'startTime', 'endTime' ]);
   attrs.userId = req.user.id;
   attrs.disabled = helper.parseBoolean(req.body.disabled);
@@ -41,7 +38,7 @@ router.get('/', function(req, res, next) {
   const cursor = helper.parseInt(req.query.cursor);
   const limit = helper.pageSize(req.query.limit);
 
-  const conditions = { id: orm.gt(cursor), disabled: false };
+  const conditions = { id: orm.gt(cursor) };
   req.models.elections.find(conditions, { limit }, [ 'id', 'Z' ], function(err, elections) {
     if (err) {
       return next(err);
@@ -53,7 +50,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
   const { id } = req.params;
-  req.models.elections.one({ id, disabled: false }, function(err, election) {
+  req.models.elections.get(id, function(err, election) {
     if (err) {
       return next(err);
     }
@@ -67,11 +64,6 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.patch('/:id', middlewaresForSave, function(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const electionId = req.params.id;
   const { title, description, startTime, endTime, disabled } = req.body;
 

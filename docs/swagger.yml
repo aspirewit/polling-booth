@@ -168,16 +168,16 @@ paths:
           example: "{ code: 200, message: 'success', data: { election: {} } }"
 
   '/elections/{id}':
+    parameters:
+    - in: "path"
+      name: "id"
+      required: true
+      schema:
+        type: "integer"
     get:
       tags:
         - "election"
       summary: "Show election"
-      parameters:
-      - in: "path"
-        name: "id"
-        required: true
-        schema:
-          type: "integer"
       responses:
         200:
           description: "Success"
@@ -189,11 +189,6 @@ paths:
         - "election"
       summary: "Update election"
       parameters:
-      - in: "path"
-        name: "id"
-        required: true
-        schema:
-          type: "integer"
       - in: "formData"
         name: "title"
         schema:
@@ -223,3 +218,111 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { election: {} } }"
+
+  /elections/{electionId}/candidates:
+    parameters:
+    - in: "path"
+      name: "electionId"
+      required: true
+      schema:
+        type: "integer"
+    get:
+      tags:
+        - "candidate"
+      summary: "List candidates of election"
+      parameters:
+      - in: "query"
+        name: "cursor"
+        schema:
+          type: "integer"
+      - in: "query"
+        name: "limit"
+        schema:
+          type: "integer"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { candidates: [] } }"
+    post:
+      security:
+        - authentication: []
+      tags:
+        - "candidate"
+      summary: "Create candidate"
+      parameters:
+      - in: "formData"
+        name: "fullname"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "avatar"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "introduction"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+
+  '/elections/{electionId}/candidates/{id}':
+    parameters:
+    - in: "path"
+      name: "electionId"
+      required: true
+      schema:
+        type: "integer"
+    - in: "path"
+      name: "id"
+      required: true
+      schema:
+        type: "integer"
+    get:
+      tags:
+        - "candidate"
+      summary: "Show candidate"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+    patch:
+      security:
+        - authentication: []
+      tags:
+        - "candidate"
+      summary: "Update candidate"
+      parameters:
+      - in: "formData"
+        name: "fullname"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "avatar"
+        schema:
+          type: "string"
+        required: true
+      - in: "formData"
+        name: "introduction"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+    delete:
+      security:
+        - authentication: []
+      tags:
+        - "candidate"
+      summary: "Destroy candidate"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success' }"

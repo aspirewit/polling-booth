@@ -78,8 +78,6 @@ app.use(function(err, req, res, next) {
 // Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/elections', electionsRouter);
-app.use('/candidates', candidatesRouter);
-app.use('/ballots', ballotsRouter);
+app.use('/elections', electionsRouter, candidatesRouter, ballotsRouter);
 
 module.exports = app;
