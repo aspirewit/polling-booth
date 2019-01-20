@@ -47,7 +47,7 @@ app.use(expressJwt({
     '/users/register',
     '/users/login',
     { url: '/elections', methods: [ 'GET' ] },
-    { url: /\/elections\/[0-9]+/, methods: [ 'GET' ] },
+    { url: /^\/elections\/[0-9]+$/, methods: [ 'GET' ] },
   ],
 }));
 

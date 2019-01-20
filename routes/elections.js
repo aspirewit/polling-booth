@@ -10,6 +10,16 @@ const { adminRequired, checkValidationResult } = require('../middlewares');
 
 const router = express.Router();
 
+const checkTimeRange = function(req, res, next) {
+  const { startTime, endTime } = req.body;
+
+  if (endTime > startTime) {
+    next();
+  } else {
+    res.status(422).json({ message: 'the end time must be greater than the start time' });
+  }
+};
+
 const middlewaresForSave = [
   adminRequired(),
   check('title').isLength({ min: 5, max: 30 }),
@@ -18,6 +28,7 @@ const middlewaresForSave = [
   check('endTime').isInt(),
   check('disabled').isBoolean(),
   checkValidationResult(),
+  checkTimeRange,
 ];
 
 router.post('/', middlewaresForSave, function(req, res, next) {
@@ -38,7 +49,7 @@ router.get('/', function(req, res, next) {
   const cursor = helper.parseInt(req.query.cursor);
   const limit = helper.pageSize(req.query.limit);
 
-  const conditions = { id: orm.gt(cursor) };
+  const conditions = cursor ? { id: orm.lt(cursor) } : {};
   req.models.elections.find(conditions, { limit }, [ 'id', 'Z' ], function(err, elections) {
     if (err) {
       return next(err);

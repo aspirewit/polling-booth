@@ -11,6 +11,7 @@ const services = require('../services');
 const { checkValidationResult } = require('../middlewares');
 
 const router = express.Router();
+
 const middlewaresForRegister = [
   check('email').isEmail(),
   check('fullname').isLength({ min: 1, max: 24 }),
@@ -32,6 +33,7 @@ router.post('/verification-code', [
   checkValidationResult(),
 ], function(req, res) {
   const email = req.body.email;
+
   services.verificationCode.allowGenerate(email).then(function(allowed) {
     if (!allowed) {
       return res.json({ code: 1001, message: 'too frequent requests' });

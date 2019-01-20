@@ -37,7 +37,7 @@ const checkElectionStartTime = function(req, res, next) {
 const middlewaresForSave = [
   adminRequired(),
   check('fullname').isLength({ min: 1, max: 12 }),
-  check('avatar'),
+  check('avatar').isURL(),
   check('introduction').isLength({ min: 10, max: 1024 }),
   checkValidationResult(),
   loadElection,
@@ -72,13 +72,14 @@ router.get('/:electionId/candidates', function(req, res, next) {
   const cursor = helper.parseInt(req.query.cursor);
   const limit = helper.pageSize(req.query.limit);
 
-  const conditions = { electionId, id: orm.gt(cursor) };
+  const conditions = cursor ? { electionId, id: orm.lt(cursor) } : {};
   req.models.candidates.find(conditions, { limit }, [ 'id', 'Z' ], function(err, candidates) {
     if (err) {
       return next(err);
     }
 
-    res.json({ code: 200, message: 'success', data: { candidates } });
+    const output = candidates.map(candidate => candidate.serialize(req.loggedInUser));
+    res.json({ code: 200, message: 'success', data: { candidates: output } });
   });
 });
 
@@ -93,7 +94,7 @@ router.get('/:electionId/candidates/:id', function(req, res, next) {
       return res.status(404).json({ message: 'resource not found' });
     }
 
-    res.json({ code: 200, message: 'success', data: { candidate } });
+    res.json({ code: 200, message: 'success', data: { candidate: candidate.serialize(req.loggedInUser) } });
   });
 });
 
@@ -134,7 +135,7 @@ router.delete('/:electionId/candidates/:id', middlewaresForDestroy, function(req
         election.candidatesCount -= 1;
         election.save();
 
-        req.models.ballots.find({ candidateId: candidate.id }).remove();
+        req.models.ballots.find({ candidateId: candidate.id }).remove(function() {});
       }
     });
 

@@ -233,6 +233,8 @@ paths:
     get:
       tags:
         - "candidate"
+      security:
+        - authentication: []
       summary: "List candidates of election"
       parameters:
       - in: "query"
@@ -273,6 +275,9 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+        1101:
+          description: "Election has been started"
+          example: "{ code: 1101, message: 'election has been started' }"
         422:
           description: "Unprocessable entity"
 
@@ -358,6 +363,27 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success' }"
+        1001:
+          description: "At least one ballot"
+          example: "{ code: 1001, message: 'at least one ballot' }"
+        1002:
+          description: "Exceed maximum ballots"
+          example: "{ code: 1002, message: 'exceed maximum ballots' }"
+        1003:
+          description: "Contains nonexistent candidate ids"
+          example: "{ code: 1002, message: 'contains nonexistent candidate ids' }"
+        1101:
+          description: "Election is disabled"
+          example: "{ code: 1101, message: 'election is disabled' }"
+        1102:
+          description: "Election haven't started yet"
+          example: "{ code: 1102, message: 'election haven't started yet' }"
+        1103:
+          description: "Election has been ended"
+          example: "{ code: 1103, message: 'election has been ended' }"
+        1104:
+          description: "Already voted"
+          example: "{ code: 1104, message: 'already voted' }"
         422:
           description: "Unprocessable entity"
     get:
