@@ -131,10 +131,10 @@ paths:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { elections: [] } }"
     post:
-      security:
-        - authentication: []
       tags:
         - "election"
+      security:
+        - authentication: []
       summary: "Create election"
       parameters:
       - in: "formData"
@@ -166,6 +166,8 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { election: {} } }"
+        422:
+          description: "Unprocessable entity"
 
   '/elections/{id}':
     parameters:
@@ -183,10 +185,10 @@ paths:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { election: {} } }"
     patch:
-      security:
-        - authentication: []
       tags:
         - "election"
+      security:
+        - authentication: []
       summary: "Update election"
       parameters:
       - in: "formData"
@@ -218,6 +220,8 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { election: {} } }"
+        422:
+          description: "Unprocessable entity"
 
   /elections/{electionId}/candidates:
     parameters:
@@ -244,10 +248,10 @@ paths:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { candidates: [] } }"
     post:
-      security:
-        - authentication: []
       tags:
         - "candidate"
+      security:
+        - authentication: []
       summary: "Create candidate"
       parameters:
       - in: "formData"
@@ -269,6 +273,8 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+        422:
+          description: "Unprocessable entity"
 
   '/elections/{electionId}/candidates/{id}':
     parameters:
@@ -291,10 +297,10 @@ paths:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { candidate: {} } }"
     patch:
-      security:
-        - authentication: []
       tags:
         - "candidate"
+      security:
+        - authentication: []
       summary: "Update candidate"
       parameters:
       - in: "formData"
@@ -316,13 +322,60 @@ paths:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success', data: { candidate: {} } }"
+        422:
+          description: "Unprocessable entity"
     delete:
-      security:
-        - authentication: []
       tags:
         - "candidate"
+      security:
+        - authentication: []
       summary: "Destroy candidate"
       responses:
         200:
           description: "Success"
           example: "{ code: 200, message: 'success' }"
+
+  /elections/{electionId}/ballots:
+    parameters:
+    - in: "path"
+      name: "electionId"
+      required: true
+      schema:
+        type: "integer"
+    post:
+      tags:
+        - "ballot"
+      security:
+        - authentication: []
+      summary: "Create ballots"
+      parameters:
+      - in: "formData"
+        name: "candidateIds"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success' }"
+        422:
+          description: "Unprocessable entity"
+    get:
+      tags:
+        - "ballot"
+      security:
+        - authentication: []
+      summary: "List ballots"
+      parameters:
+      - in: "query"
+        name: "cursor"
+        schema:
+          type: "integer"
+      - in: "query"
+        name: "limit"
+        schema:
+          type: "integer"
+      responses:
+        200:
+          description: "Success"
+          example: "{ code: 200, message: 'success', data: { ballots: [] } }"

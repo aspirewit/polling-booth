@@ -27,7 +27,7 @@ const loadElection = function(req, res, next) {
 
 const checkElectionStartTime = function(req, res, next) {
   const startTime = req.resources.election.startTime;
-  if (startTime < Date.now()) {
+  if (startTime > Date.now()) {
     next();
   } else {
     res.json({ code: 1101, message: 'election has been started' });
@@ -133,6 +133,8 @@ router.delete('/:electionId/candidates/:id', middlewaresForDestroy, function(req
         const election = req.resources.election;
         election.candidatesCount -= 1;
         election.save();
+
+        req.models.ballots.find({ candidateId: candidate.id }).remove();
       }
     });
 
