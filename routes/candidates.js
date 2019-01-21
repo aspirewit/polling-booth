@@ -78,8 +78,7 @@ router.get('/:electionId/candidates', function(req, res, next) {
       return next(err);
     }
 
-    const output = candidates.map(candidate => candidate.serialize(req.loggedInUser));
-    res.json({ code: 200, message: 'success', data: { candidates: output } });
+    res.json({ code: 200, message: 'success', data: { candidates } });
   });
 });
 
@@ -94,7 +93,7 @@ router.get('/:electionId/candidates/:id', function(req, res, next) {
       return res.status(404).json({ message: 'resource not found' });
     }
 
-    res.json({ code: 200, message: 'success', data: { candidate: candidate.serialize(req.loggedInUser) } });
+    res.json({ code: 200, message: 'success', data: { candidate } });
   });
 });
 

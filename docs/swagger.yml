@@ -233,8 +233,6 @@ paths:
     get:
       tags:
         - "candidate"
-      security:
-        - authentication: []
       summary: "List candidates of election"
       parameters:
       - in: "query"

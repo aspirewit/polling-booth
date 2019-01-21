@@ -1,7 +1,5 @@
 'use strict';
 
-const objects = require('lodash/object');
-
 module.exports = function(orm, db) {
   db.define('candidates', {
     fullname: { type: 'text', required: true },
@@ -24,14 +22,6 @@ module.exports = function(orm, db) {
     validations: {
       fullname: orm.enforce.ranges.length(1, 12),
       introduction: orm.enforce.ranges.length(10, 1024),
-    },
-    methods: {
-      serialize(user) {
-        if (user && user.admin) {
-          return this;
-        }
-        return objects.omit(this, 'ballotsCount');
-      },
     },
   });
 };

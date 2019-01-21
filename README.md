@@ -37,13 +37,12 @@ npm run debug
 You can visit [http://localhost:3000/swagger](http://localhost:3000/swagger) to view the API document.
 
 ## Admin user
-Email: admin@example.com
+Email: admin@example.com  
 Password: abcd1234
 
 ## Docs
 1. API - [http://localhost:3000/swagger](http://localhost:3000/swagger)
 
 ## TODO
-1. Caching
-2. Testcase
-3. Dockerizing
+1. Testcase
+2. Dockerizing
