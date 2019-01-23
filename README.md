@@ -18,7 +18,7 @@ export POLLING_BOOTH_DATABASE_PASSWORD='<database password>'    # root
 
 ### 3. Setting configurations
 ```shell
-copy config/settings.js.example config/settings.js
+cp config/settings.js.example config/settings.js
 ```
 
 **NOTE:** This `settings.js` file is a example and need to be adjusted according to the actual situation.
